@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Priority {
+  low
+  medium
+  high
+}
+
+enum TaskStatus {
+  todo
+  in_progress
+  done
+}
+
+enum SessionStatus {
+  active
+  completed
+}
+
+enum DistractionType {
+  social_media
+  manual_break
+  unknown
+}
+
+model User {
+  id               String            @id @default(uuid())
+  email            String            @unique
+  password         String
+  refreshTokenHash String?
+  createdAt        DateTime          @default(now())
+  tasks            Task[]
+  sessions         FocusSession[]
+  distractions     DistractionEvent[]
+}
+
+model Task {
+  id               String         @id @default(uuid())
+  userId           String
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title            String
+  description      String?
+  priority         Priority       @default(medium)
+  status           TaskStatus     @default(todo)
+  estimatedMinutes Int
+  createdAt        DateTime       @default(now())
+  dueDate          DateTime?
+  sessions         FocusSession[]
+
+  @@index([userId, status])
+  @@index([userId, createdAt])
+  @@unique([id, userId])
+}
+
+model FocusSession {
+  id           String             @id @default(uuid())
+  userId       String
+  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  taskId       String
+  task         Task               @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  startTime    DateTime
+  endTime      DateTime?
+  duration     Int?
+  status       SessionStatus      @default(active)
+  distractions DistractionEvent[]
+
+  @@index([userId, status])
+  @@index([userId, startTime])
+  @@unique([id, userId])
+}
+
+model DistractionEvent {
+  id        String          @id @default(uuid())
+  userId    String
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionId String
+  session   FocusSession    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  type      DistractionType
+  timestamp DateTime        @default(now())
+
+  @@index([userId, timestamp])
+  @@unique([id, userId])
+}

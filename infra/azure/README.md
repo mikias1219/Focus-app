@@ -57,6 +57,11 @@ az group delete --name focusflow-rg --yes --no-wait
 
 ## Troubleshooting
 
+- **`PermissionError: ... '/home/.../.azure/az.sess'`** — The `~/.azure` directory was probably created as **root** (e.g. `sudo az login`). Fix ownership and always use `az` as your normal user:
+  ```bash
+  sudo chown -R "$USER:$USER" ~/.azure
+  az login
+  ```
 - **OpenAI / model version errors**: Adjust `--model-version` in `deploy.sh` or add a deployment in the Azure portal; see [Azure OpenAI models](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models).
 - **Web shows API errors**: Rebuild the web image after the API URL is stable (`./deploy.sh` again) so `NEXT_PUBLIC_API_URL` matches.
 - **Prisma on startup**: The API image runs `prisma db push` on boot (no migration folder yet). Add Prisma migrations for production hardening.

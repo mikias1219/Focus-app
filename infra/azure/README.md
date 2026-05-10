@@ -7,6 +7,17 @@ Interactive `az login` must be run **on your machine**; it cannot be completed f
 ## Prerequisites
 
 1. [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) installed.
+
+### Install Azure CLI on Ubuntu (e.g. 24.04)
+
+If you see `az: command not found`, run (requires `sudo` password):
+
+```bash
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+az version
+```
+
+Then `az login` (or `az login --use-device-code` over SSH).
 2. An Azure subscription (OpenAI may require [access / quota](https://learn.microsoft.com/en-us/azure/ai-services/openai/overview) in the region you pick).
 3. Python 3 (used to URL-encode the database password).
 

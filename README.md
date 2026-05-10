@@ -42,6 +42,10 @@ Full-stack productivity app: **NestJS** API + **PostgreSQL** (Prisma) + **Next.j
 | `backend/` | NestJS API, Prisma |
 | `frontend/` | Next.js (App Router) |
 
+## Deploy to Azure
+
+See **[infra/azure/README.md](infra/azure/README.md)** for Container Apps, PostgreSQL, ACR, and optional **Azure OpenAI**. Run `az login` locally, configure `infra/azure/.env.azure`, then `./infra/azure/deploy.sh`.
+
 ## License
 
 Private / UNLICENSED (see `backend/package.json`).

@@ -7,7 +7,7 @@ const repoRoot = path.join(__dirname, "..");
 loadEnvConfig(repoRoot);
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: "standalone",
 };
 
 export default nextConfig;
